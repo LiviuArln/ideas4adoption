@@ -17,5 +17,6 @@ object binary_search {
   }
 
   new BS(s).search(776)
+  
 
 }

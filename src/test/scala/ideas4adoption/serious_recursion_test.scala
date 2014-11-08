@@ -17,6 +17,6 @@ object serious_recursion_test extends Properties("R/I 3") {
   val hanoiI = new HanoiDecompostion with Iterative
 
   property("Hanoi does not care") = forAll(Gen.posNum[Int] suchThat (_ < 22)) { (a: Int) =>
-    hanoiR.solve((a, 1, 2, 3)) == hanoiI.solve((a, 1, 2, 3))
+    hanoiR.solve((a, (1, 2, 3))) == hanoiI.solve((a, (1, 2, 3)))
   }
 }

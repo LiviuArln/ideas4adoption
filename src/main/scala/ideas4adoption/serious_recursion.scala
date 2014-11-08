@@ -66,14 +66,14 @@ object serious_recursion {
   }
 
   abstract class HanoiDecompostion extends Decomposition {
-    type Problem = (Int, Int, Int, Int)
+    type Problem = (Int, (Int, Int, Int))
     type Result = List[(Int, Int)]
 
     def end(p: Problem) = if (p._1 == 0) Some(Nil) else None
     def step(p: Problem) =
-      List((p._1 - 1, p._4, p._3, p._2), (p._1 - 1, p._2, p._4, p._3))
+      List((p._1 - 1, (p._2._3, p._2._2, p._2._1)), (p._1 - 1, (p._2._1, p._2._3, p._2._2)))
     def combine(p: Problem, rs: List[Result]) =
-      rs.reduceLeft((x, y) => x ::: ((p._3, p._2) :: y))
+      rs.reduceLeft((x, y) => x ::: ((p._2._2, p._2._1) :: y))
   }
 
 }
