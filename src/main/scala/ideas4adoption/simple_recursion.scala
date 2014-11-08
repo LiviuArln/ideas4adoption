@@ -1,11 +1,11 @@
+package ideas4adoption
+
 object simple_recursion {
   def gcdEuclid(a: Int, b: Int): Int = b match {
     case 0 => a
     case _ => gcdEuclid(b, a % b)
-  }                                               //> gcdEuclid: (a: Int, b: Int)Int
-
-  gcdEuclid(33, 27)                               //> res0: Int = 3
-
+  } 
+  
   trait Decomposition {
     type Problem
     type Result
@@ -40,8 +40,4 @@ object simple_recursion {
     def end(p: Problem) = if (p._2 == 0) Some(p._1) else None
     def step(p: Problem) = (p._2, p._1 % p._2)
   }
-
- 
-                                                  //> res2: Int = 3
-
 }

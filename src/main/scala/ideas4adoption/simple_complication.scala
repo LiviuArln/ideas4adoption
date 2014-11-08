@@ -1,8 +1,10 @@
+package ideas4adoption
+
 object simple_complication {
   def factorial(n: Int): Int = n match {
     case 1 => 1
     case _ => n * factorial(n - 1)
-  }                                               //> factorial: (n: Int)Int
+  }
 
   trait Decomposition {
     type Problem
@@ -45,8 +47,6 @@ object simple_complication {
     def combine(p: Int, r: Int) = p * r
   }
 
-  
-
   class EuclidGCDStepsDecompostion {
     type Problem = (Int, Int)
     type Result = (Int, Int)
@@ -56,7 +56,6 @@ object simple_complication {
     def combine(p: Problem, r: Result) = (r._1, r._2 + 1)
   }
 
-
   class EuclidGCDDecompostion {
     type Problem = (Int, Int)
     type Result = Int
@@ -65,6 +64,4 @@ object simple_complication {
     def step(p: Problem) = (p._2, p._1 % p._2)
     def combine(p: Problem, r: Result) = r
   }
-
-
 }

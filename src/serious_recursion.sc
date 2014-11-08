@@ -18,7 +18,7 @@ object serious_recursion {
     def solve(p: Problem): Result
   }
 
-  trait Recursion extends Decomposition {
+  trait Recursion extends Decomposition { 
     def solve(p: Problem): Result =
       end(p) match {
         case Some(result) => result
