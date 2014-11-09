@@ -7,18 +7,25 @@ import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
 import org.scalacheck.Test.Parameters
 import org.scalacheck.Test.Parameters.Default
+import org.scalacheck.Test
 
 object ternary_search_test extends Properties("R/I 3") {
-  
-  override def check: Unit = check(new Default {
-    override val minSuccessfulTests: Int = 1000
-  })
 
-  property("Do we have a match?") = forAll(Arbitrary.arbitrary[List[Int]] suchThat (_.size > 1) suchThat (new TS(_).search(0).size > 0)) { (s: List[Int]) =>
+  //  override def mainRunner(args: Array[String]): Int = {
+  //    val res = Test.checkProperties(Parameters.default.withMinSuccessfulTests(100) , this)
+  //    val failed = res.filter(!_._2.passed).size
+  //    failed
+  //  }
+
+  val smallNumbersList = Gen.containerOf[List, Int](Gen.choose(-200, 200)) suchThat (_.size > 1)
+
+  property("Do we have a match?") = forAll(smallNumbersList) { (s: List[Int]) =>
     val res = new TS(s).search(0)
     println("___________________")
-    println(s.sorted)
-    println(res)
-    true
+    collect(s.size * 10 / res._2) {
+      println(s.sorted)
+      println(res._1)
+      true
+    }
   }
 }
