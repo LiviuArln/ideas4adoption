@@ -9,8 +9,9 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Test.Parameters
 import org.scalacheck.Test.Parameters.Default
 import org.scalacheck.Test
+import ideas4adoption.Nary_search.NS
 
-object ternary_search_test extends Properties("R/I 3") {
+object ternary_search_test extends Properties("AA 1") {
 
   //  override def mainRunner(args: Array[String]): Int = {
   //    val res = Test.checkProperties(Parameters.default.withMinSuccessfulTests(100) , this)
@@ -32,5 +33,9 @@ object ternary_search_test extends Properties("R/I 3") {
 
   property("Same thing") = forAll(smallNumbersList) { (s: List[Int]) =>
     new TS(s).search(0) == new TSN(s).search(0)
+  }
+  
+  property("Same but ... more abstract") = forAll(smallNumbersList) { (s: List[Int]) =>
+    new TS(s).search(0) == new NS(s,2).search(0)
   }
 }
