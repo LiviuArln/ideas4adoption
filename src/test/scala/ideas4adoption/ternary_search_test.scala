@@ -1,6 +1,7 @@
 package ideas4adoption
 
 import ternary_search._
+import ternary_search_nice._
 import org.scalacheck.Properties
 import org.scalacheck.Prop._
 import org.scalacheck.Gen
@@ -27,5 +28,9 @@ object ternary_search_test extends Properties("R/I 3") {
       println(res._1)
       true
     }
+  }
+
+  property("Same thing") = forAll(smallNumbersList) { (s: List[Int]) =>
+    new TS(s).search(0) == new TSN(s).search(0)
   }
 }
