@@ -1,0 +1,19 @@
+plugins {
+	id("java")
+	id("scala")
+	id("eclipse")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.1'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.scala-lang:scala-library:2.10.4'
+    compile 'org.scalacheck:scalacheck_2.10:1.11.6'
+	
+}
