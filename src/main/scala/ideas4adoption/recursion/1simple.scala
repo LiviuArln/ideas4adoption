@@ -1,6 +1,6 @@
-package ideas4adoption
+package ideas4adoption.recursion
 
-object simple_recursion {
+object simple {
   def gcdEuclid(a: Int, b: Int): Int = b match {
     case 0 => a
     case _ => gcdEuclid(b, a % b)
@@ -37,6 +37,7 @@ object simple_recursion {
   class EuclidGCDDecomposition {
     type Problem = (Int, Int)
     type Result = Int
+    
     def end(p: Problem) = if (p._2 == 0) Some(p._1) else None
     def step(p: Problem) = (p._2, p._1 % p._2)
   }

@@ -1,6 +1,6 @@
-package ideas4adoption
+package ideas4adoption.recursion
 
-object simple_complication {
+object complication {
   def factorial(n: Int): Int = n match {
     case 1 => 1
     case _ => n * factorial(n - 1)

@@ -10,33 +10,40 @@ import org.scalacheck.Test.Parameters
 import org.scalacheck.Test.Parameters.Default
 import org.scalacheck.Test
 import ideas4adoption.Nary_search.NS
+import ideas4adoption.util._
 
 object Nary_search_test extends Properties("AA 2") {
-  
-  val smallNumbersList = Gen.containerOf[List, Int](Gen.choose(-200, 200)) 
-  def atLeast(n:Int) = smallNumbersList suchThat (_.size >= n)
-
-  implicit def pointsOrdering: Ordering[List[Int]] = new Ordering[List[Int]] {
-    def compare(l1: List[Int], l2: List[Int]) = {
-      l1.zip(l2).map {
-        case (i1, i2) => i1.compareTo(i2)
-      }.dropWhile(_ == 0).head
-    }
-  }
 
   property("Same but ... more abstract") = forAll(atLeast(2)) { (s: List[Int]) =>
     val r1 = new TS(s).search(0)
-    val r2 = new NS(s, 2).search(0)
-    r1._1.sorted.equals(r2._1.sorted) && r1._2 == r2._2
+    val ns = new NS(s, 2)
+    val r2 = ns.search(0)
+    r1._1.sorted.equals(r2.sorted) && r1._2 == ns.Sector.sectorsGenerated
   }
 
-  property("Do we have a match?") = forAll(atLeast(3)) { (s: List[Int]) =>
-    val res = new NS(s, 3).search(0)
-    println("___________________")
-    collect(s.size * 10 / res._2) {
-      println(s.sorted)
-      println(res._1)
+  property("Cube") = forAll(atLeast(3)) { (s: List[Int]) =>
+    val ns = new NS(s, 3)
+    val res = ns.search(0)
+    collect(s.size * 10 / ns.Sector.sectorsGenerated) {
       true
     }
   }
+
+  property("Hypercube 4") = forAll(atLeast(4)) { (s: List[Int]) =>
+    val ns = new NS(s, 4)
+    val res = ns.search(0)
+    collect(s.size * 10 / ns.Sector.sectorsGenerated) {
+      true
+    }
+  }
+
+//  property("Hypercube 5") = forAll(atLeast(5)) { (s: List[Int]) =>
+//    val ns = new NS(s, 5)
+//    val res = ns.search(0)
+//    collect(ns.Sector.sectorsGenerated / Math.pow(s.size, 5) , "sectors/(size^5) ratio") {
+//      true
+//    }
+//  }
+  
+  properties.foreach(println)
 }

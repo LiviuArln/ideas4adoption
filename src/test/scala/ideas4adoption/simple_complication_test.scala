@@ -1,9 +1,9 @@
 package ideas4adoption
 
-import simple_complication._
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 import org.scalacheck.Gen
+import ideas4adoption.recursion.complication._
 
 object simple_complication_test extends Properties("R/I 2") {
   val facrotialR = new FactorialDecompostion with Recursion

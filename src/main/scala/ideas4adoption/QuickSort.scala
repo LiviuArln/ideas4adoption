@@ -11,7 +11,7 @@ class QuickSortOnDemand(xs: Array[Int]) {
       val t = xs(i); xs(i) = xs(j); xs(j) = t
     }
 
-    def sort1(left: Int, right: Int) {
+    def fractionSort(left: Int, right: Int) {
       val pivot = xs((left + right) / 2)
       var leftPointer = left
       var rightPointer = right
@@ -24,14 +24,14 @@ class QuickSortOnDemand(xs: Array[Int]) {
           rightPointer -= 1
         }
       }
-      if (left < rightPointer) sort1(left, rightPointer)
+      if (left < rightPointer) fractionSort(left, rightPointer)
       if (rightPointer < right) splits.push(leftPointer)
     }
 
     if (lastSortedIndex < index - 1) throw new IllegalArgumentException("")
     else if (lastSortedIndex > index - 1) xs(index)
     else {
-      val result = sort1(lastSortedIndex + 1, splits.pop)
+      val result = fractionSort(lastSortedIndex + 1, splits.pop)
       lastSortedIndex = index
       result
     }

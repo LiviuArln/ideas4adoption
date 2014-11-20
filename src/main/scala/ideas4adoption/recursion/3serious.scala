@@ -1,9 +1,9 @@
-package ideas4adoption
+package ideas4adoption.recursion
 
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.Stack
 
-object serious_recursion {
+object serious {
   def fibonacci(n: Int): Int = n match {
     case 1 => 1
     case 2 => 1

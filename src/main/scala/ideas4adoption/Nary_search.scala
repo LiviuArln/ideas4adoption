@@ -1,14 +1,20 @@
 package ideas4adoption
 
 import ideas4adoption.ternary_search.TS
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
+import scala.annotation.tailrec
 
 object Nary_search extends App {
   class NS(s: List[Int], dimenstions: Int) {
     val bs = s.sorted
-    println("#####################")
 
     object Sector {
-      def init(zeroTo: Int, dimensions: Int) = Sector(List.fill(dimensions)(Segment(0, zeroTo)), fullSplit(dimensions).toSet, diagonalSplit(dimensions).toSet)
+      var sectorsGenerated = 0
+      def init(zeroTo: Int, dimensions: Int) = {
+        sectorsGenerated = 0
+        Sector(List.fill(dimensions)(Segment(0, zeroTo)), fullSplit(dimensions).toSet, diagonalSplit(dimensions).toSet)
+      }
 
       def fullSplit(dimensions: Int) = (0 to Math.pow(2, dimensions).toInt - 1).toList.map {
         _.toBinaryString.toList.map(_.toString.toInt)
@@ -27,23 +33,21 @@ object Nary_search extends App {
       search_aux(Sector.init(bs.size - 1, dimenstions), i, 1)
     }
 
-    def search_aux(sector: Sector, value: Int, step: Int): (List[Point], Int) = {
+    def search_aux(sector: Sector, value: Int, step: Int): List[Point] = {
       //println(List.fill(step)("  ").mkString + sector)
-      if (!sector.containsValue(value)) (Nil, 1)
+      if (!sector.containsValue(value)) Nil
       else if (sector.isPoint)
         if (sector.hasExactValue(value)) {
           //println(List.fill(step)("  ").mkString + "solution")
-          (List(sector.toPoint), 1)
-        } else (Nil, 1)
+          List(sector.toPoint)
+        } else Nil
       else {
-        sector.split.toList.map(s => search_aux(s, value, step + 1)).foldLeft((List[Point](), 1)) {
-          case ((sol1, step1), (sol2, step2)) => (sol1 ::: sol2, step1 + step2)
-        }
+        sector.split.toList.map(s => search_aux(s, value, step + 1)).foldLeft(List[Point]())(_ ::: _)
       }
     }
 
     case class Sector(segments: List[Segment], fullSplit: Set[List[Int]], diagonalSplit: Set[List[Int]]) {
-
+      Sector.sectorsGenerated += 1
       //println(segments)
       def isPoint = segments.forall(_.isPoint)
       def min = segments.map(s => bs(s.min)).sum
@@ -58,10 +62,18 @@ object Nary_search extends App {
         val newSectors = splitSchema.map { s =>
           segmentSplits.zip(s).map {
             case (segmentSplit, digit) => segmentSplit(digit)
-          }
+          }.map(shrinker)
         }
         newSectors.map(Sector(_, fullSplit, diagonalSplit))
       }
+
+      val shrinker: Segment => Segment =
+        if (isDiagonal) { s: Segment =>
+          s
+        } else { s: Segment =>
+          if (bs(s.max) == bs(s.min)) Segment(s.min, s.min)
+          else s
+        }
     }
 
     case class Segment(min: Int, max: Int) {
@@ -89,5 +101,37 @@ object Nary_search extends App {
 
   val z = List(4, -4, -6, 6)
   //println(new NS(z, 2).search(0))
-  println(new NS(ss, 5).search(0)._2)
+
+  import ideas4adoption.util._
+
+  //  println()
+
+  def randomList(span: Int)(size: Int) = for {
+    xs <- Gen.listOfN(size, Gen.choose(-span, span))
+  } yield xs
+
+  trait NSInspector {
+    val minimumSize = 20
+    val growthSpurts = 5
+    val sampleSize = 10000
+
+    def problemSampleGenerator(size: Int) = randomList(1000)(size)
+
+    def problemSolver(problem: List[Int]) = new NS(problem, 3).search(0)
+  }
+
+  type P = List[Int]
+  type R = List[List[Int]]
+  
+  val growth = new ExponentialSizeGrowth[P, R] with NSInspector
+
+  //  growth.timeGrowtsRates.foreach(r =>
+  //    println("r " + r))
+
+  val stats = new Statistics[P, R] with NSInspector {
+    val problemSize = 500
+  }
+  
+  stats.sigmas.sortBy(_._1).foreach(println)
+
 }

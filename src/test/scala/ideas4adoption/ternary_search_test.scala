@@ -36,6 +36,6 @@ object ternary_search_test extends Properties("AA 1") {
   }
   
   property("Same but ... more abstract") = forAll(smallNumbersList) { (s: List[Int]) =>
-    new TS(s).search(0) == new NS(s,2).search(0)
+    new TS(s).search(0)._1.eq(new NS(s,2).search(0))
   }
 }
