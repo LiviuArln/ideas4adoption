@@ -1,4 +1,4 @@
-package ideas4adoption
+package ideas4adoption.sort
 
 import scala.collection.mutable.Stack
 
@@ -6,7 +6,8 @@ class QuickSortOnDemand(xs: Array[Int]) {
   val splits = Stack[Int](xs.length - 1)
   var lastSortedIndex = -1
 
-  def find(index: Int) {
+  def find(index: Int) = {
+    println(index)
     def swap(i: Int, j: Int) {
       val t = xs(i); xs(i) = xs(j); xs(j) = t
     }
@@ -29,16 +30,19 @@ class QuickSortOnDemand(xs: Array[Int]) {
     }
 
     if (lastSortedIndex < index - 1) throw new IllegalArgumentException("")
-    else if (lastSortedIndex > index - 1) xs(index)
-    else {
-      val result = fractionSort(lastSortedIndex + 1, splits.pop)
+    else if (lastSortedIndex == index - 1) {
+      fractionSort(lastSortedIndex + 1, splits.pop)
       lastSortedIndex = index
-      result
     }
+    xs(index)
   }
-  
-  def sort = for {
-    i <- 0 to splits.top
-  } yield find(i)
+
+  def sort: Stream[Int] = {
+    def sort_aux(from: Int): Stream[Int] =
+      if (from == xs.size) Stream.Empty
+      else find(from) #:: sort_aux(from + 1)
+
+    sort_aux(0)
+  }
 
 }
