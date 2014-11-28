@@ -1,9 +1,11 @@
 package ideas4adoption.recursion
 
+import spire.math.Integral
+
 object complication {
-  def factorial(n: Int): Int = n match {
-    case 1 => 1
-    case _ => n * factorial(n - 1)
+  def factorial[A](n: A)(implicit A: Integral[A]): A = {
+    if (n.equals(A.one)) A.one
+    else A.times(n, factorial(A.minus(n, A.one)))
   }
 
   trait Decomposition {
@@ -15,16 +17,16 @@ object complication {
     def combine(p: Problem, r: Result): Result
   }
 
-  trait Recursion extends Decomposition {
+  trait Recursion { self: Decomposition =>
     def solve(p: Problem): Result =
       end(p) match {
         case Some(result) => result
-        case None => combine(p, solve(step(p)))
+        case None         => combine(p, solve(step(p)))
       }
 
   }
 
-  trait Iterative extends Decomposition {
+  trait Iterative { self: Decomposition =>
     def solve(p: Problem): Result = {
       var currentProblem = p
       var lastResult = end(currentProblem)
@@ -38,16 +40,16 @@ object complication {
     }
   }
 
-  class FactorialDecompostion {
-    type Problem = Int
-    type Result = Int
+  class FactorialDecompostion[A](implicit A: Integral[A]) extends Decomposition {
+    type Problem = A
+    type Result = A
 
-    def end(p: Int) = if (p == 1) Some(1) else None
-    def step(p: Int) = p - 1
-    def combine(p: Int, r: Int) = p * r
+    def end(p: Problem) = if (p.equals(A.one)) Some(A.one) else None
+    def step(p: Problem) = A.minus(p, A.one)
+    def combine(p: Problem, r: Result) = A.times(p, r)
   }
 
-  class EuclidGCDStepsDecompostion {
+  class EuclidGCDStepsDecompostion extends Decomposition {
     type Problem = (Int, Int)
     type Result = (Int, Int)
 
@@ -56,12 +58,12 @@ object complication {
     def combine(p: Problem, r: Result) = (r._1, r._2 + 1)
   }
 
-  class EuclidGCDDecompostion {
-    type Problem = (Int, Int)
-    type Result = Int
+  class EuclidGCDDecompostion[A](implicit A: Integral[A]) extends Decomposition {
+    type Problem = (A, A)
+    type Result = A
 
-    def end(p: Problem) = if (p._2 == 0) Some(p._1) else None
-    def step(p: Problem) = (p._2, p._1 % p._2)
+    def end(p: Problem) = if (A.isZero(p._2)) Some(p._1) else None
+    def step(p: Problem) = (p._2, A.quot(p._1, p._2))
     def combine(p: Problem, r: Result) = r
   }
 }

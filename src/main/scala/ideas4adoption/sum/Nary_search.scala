@@ -1,9 +1,7 @@
-package ideas4adoption
-
-import ideas4adoption.ternary_search.TS
-import org.scalacheck.Arbitrary
+package ideas4adoption.sum
 import org.scalacheck.Gen
-import scala.annotation.tailrec
+import ideas4adoption.util.ExponentialSizeGrowth
+import ideas4adoption.util.Statistics
 
 object Nary_search extends App {
   class NS(s: List[Int], dimenstions: Int) {
@@ -35,14 +33,14 @@ object Nary_search extends App {
 
     def search_aux(sector: Sector, value: Int, step: Int): List[Point] = {
       //println(List.fill(step)("  ").mkString + sector)
-      if (!sector.containsValue(value)) Nil
+      if (!sector.containsValue(value)) List.empty
       else if (sector.isPoint)
         if (sector.hasExactValue(value)) {
           //println(List.fill(step)("  ").mkString + "solution")
           List(sector.toPoint)
-        } else Nil
+        } else List.empty
       else {
-        sector.split.toList.map(s => search_aux(s, value, step + 1)).foldLeft(List[Point]())(_ ::: _)
+        sector.split.to[List].map(s => search_aux(s, value, step + 1)).foldLeft(List[Point]())(_ ::: _)
       }
     }
 
@@ -106,9 +104,7 @@ object Nary_search extends App {
 
   //  println()
 
-  def randomList(span: Int)(size: Int) = for {
-    xs <- Gen.listOfN(size, Gen.choose(-span, span))
-  } yield xs
+  
 
   trait NSInspector {
     val minimumSize = 20
@@ -117,10 +113,10 @@ object Nary_search extends App {
 
     def problemSampleGenerator(size: Int) = randomList(1000)(size)
 
-    def problemSolver(problem: List[Int]) = new NS(problem, 3).search(0)
+    def problemSolver(problem: Vector[Int]) = new NS(problem.toList, 3).search(0)
   }
 
-  type P = List[Int]
+  type P = Vector[Int]
   type R = List[List[Int]]
   
   val growth = new ExponentialSizeGrowth[P, R] with NSInspector

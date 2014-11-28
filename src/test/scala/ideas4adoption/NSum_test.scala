@@ -1,7 +1,5 @@
 package ideas4adoption
 
-import ternary_search._
-import ternary_search_nice._
 import org.scalacheck.Properties
 import org.scalacheck.Prop._
 import org.scalacheck.Gen
@@ -9,10 +7,12 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Test.Parameters
 import org.scalacheck.Test.Parameters.Default
 import org.scalacheck.Test
-import ideas4adoption.Nary_search.NS
-import ideas4adoption.NSum.WithDecomposition
 import ideas4adoption.util._
 import ideas4adoption.recursion.serious._
+import ideas4adoption.sum.ternary_search._
+import ideas4adoption.sum.ternary_search_nice._
+import ideas4adoption.sum.NSum._
+import ideas4adoption.sum.Nary_search._
 
 object NSum_test extends Properties("AA 3") {
   property("Same but diferent R2") = forAll(atLeast(2)) { (s: List[Int]) =>

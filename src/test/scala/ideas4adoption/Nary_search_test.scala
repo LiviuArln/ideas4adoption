@@ -1,7 +1,5 @@
 package ideas4adoption
 
-import ternary_search._
-import ternary_search_nice._
 import org.scalacheck.Properties
 import org.scalacheck.Prop._
 import org.scalacheck.Gen
@@ -9,8 +7,9 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Test.Parameters
 import org.scalacheck.Test.Parameters.Default
 import org.scalacheck.Test
-import ideas4adoption.Nary_search.NS
 import ideas4adoption.util._
+import ideas4adoption.sum.ternary_search._
+import ideas4adoption.sum.Nary_search.NS
 
 object Nary_search_test extends Properties("AA 2") {
 

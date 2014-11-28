@@ -7,6 +7,7 @@ class QuickSortOnDemand(xs: Array[Int]) {
   var lastSortedIndex = -1
 
   def find(index: Int) = {
+    xs.foreach(x=>println(">" + x))
     println(index)
     def swap(i: Int, j: Int) {
       val t = xs(i); xs(i) = xs(j); xs(j) = t
@@ -32,8 +33,10 @@ class QuickSortOnDemand(xs: Array[Int]) {
     if (lastSortedIndex < index - 1) throw new IllegalArgumentException("")
     else if (lastSortedIndex == index - 1) {
       fractionSort(lastSortedIndex + 1, splits.pop)
+      splits.foreach { x => println("/" + x) }
       lastSortedIndex = index
     }
+    xs.foreach(x=>println("<" + x))
     xs(index)
   }
 
@@ -44,5 +47,16 @@ class QuickSortOnDemand(xs: Array[Int]) {
 
     sort_aux(0)
   }
+
+}
+
+object X extends App {
+  val x = new QuickSortOnDemand(List(2, 0, 1).toArray)
+  val f = x.find(0)
+  println(f)
+  println(x.lastSortedIndex)
+  println(x.splits.foreach { x => println("/" + x) })
+  println(x.find(1))
+  println(x.find(2))
 
 }

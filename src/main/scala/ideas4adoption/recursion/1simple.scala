@@ -1,28 +1,28 @@
 package ideas4adoption.recursion
 
+import spire.math.Integral
+
 object simple {
-  def gcdEuclid(a: Int, b: Int): Int = b match {
-    case 0 => a
-    case _ => gcdEuclid(b, a % b)
-  } 
-  
+  def gcdEuclid[A](a: A, b: A)(implicit A: Integral[A]): A =
+    if (A.isZero(b)) a
+    else gcdEuclid(b, A.quot(a, b))
+
   trait Decomposition {
     type Problem
     type Result
-
     def end(p: Problem): Option[Result]
     def step(p: Problem): Problem
   }
 
-  trait Recursion extends Decomposition {
+  trait Recursion { self: Decomposition =>
     def solve(p: Problem): Result =
       end(p) match {
         case Some(result) => result
-        case None => solve(step(p))
+        case None         => solve(step(p))
       }
   }
 
-  trait Iterative extends Decomposition {
+  trait Iterative { self: Decomposition =>
     def solve(p: Problem): Result = {
       var currentProblem = p
       var result = end(currentProblem)
@@ -34,11 +34,10 @@ object simple {
     }
   }
 
-  class EuclidGCDDecomposition {
-    type Problem = (Int, Int)
-    type Result = Int
-    
-    def end(p: Problem) = if (p._2 == 0) Some(p._1) else None
-    def step(p: Problem) = (p._2, p._1 % p._2)
+  class EuclidGCDDecomposition[A](implicit A: Integral[A]) extends Decomposition {
+    type Problem = (A, A)
+    type Result = A
+    def end(p: Problem) = if (A.isZero(p._2)) Some(p._1) else None
+    def step(p: Problem) = (p._2, A.quot(p._1, p._2))
   }
 }

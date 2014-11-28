@@ -6,16 +6,16 @@ import org.scalacheck.Gen
 import ideas4adoption.recursion.complication._
 
 object simple_complication_test extends Properties("R/I 2") {
-  val facrotialR = new FactorialDecompostion with Recursion
-  val factorialI = new FactorialDecompostion with Iterative
+  val facrotialR = new FactorialDecompostion[Int] with Recursion
+  val factorialI = new FactorialDecompostion[Int] with Iterative
 
   property("Factorial does not care") = forAll(Gen.posNum[Int]) { (a: Int) =>
     facrotialR.solve(a) == factorialI.solve(a)
   }
 
   
-  val euclidR = new EuclidGCDDecompostion with Recursion
-  val euclidI = new EuclidGCDDecompostion with Iterative
+  val euclidR = new EuclidGCDDecompostion[Int] with Recursion
+  val euclidI = new EuclidGCDDecompostion[Int] with Iterative
 
   property("Euclid does not care") = forAll { (a: Int, b: Int) =>
     euclidR.solve((a, b)) == euclidI.solve((a, b))

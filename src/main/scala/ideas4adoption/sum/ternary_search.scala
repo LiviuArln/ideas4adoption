@@ -1,4 +1,4 @@
-package ideas4adoption
+package ideas4adoption.sum
 
 object ternary_search extends App {
   class TS(s: List[Int]) {

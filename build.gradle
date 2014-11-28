@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.scala-lang:scala-library:2.10.4'
-    compile 'org.scalacheck:scalacheck_2.10:1.11.6'
-	
+    compile 'org.scala-lang:scala-library:2.11.4'
+    compile 'org.scalacheck:scalacheck_2.11:1.11.6'
+    compile 'org.spire-math:spire_2.11:0.8.2'
 }

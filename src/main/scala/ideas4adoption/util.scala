@@ -27,20 +27,20 @@ object util {
     def sampleSize: Int
     def problemSolver(problem: P): R
 
-    def times[P, R](problemSet: List[P])(solver: P => R) =
+    def times[P, R](problemSet: Vector[P])(solver: P => R) =
       problemSet.map { p: P =>
         time {
           solver(p)
         }._2
       }
 
-    def meanTime[P, R](problemSet: List[P])(solver: P => R) = {
+    def meanTime[P, R](problemSet: Vector[P])(solver: P => R) = {
       val ts = times(problemSet)(solver)
       ts.sum / ts.size
     }
 
     def sample(size: Int) =
-      Gen.listOfN(sampleSize, problemSampleGenerator(size)).sample.get
+      Gen.listOfN(sampleSize, problemSampleGenerator(size)).sample.get.to[Vector]
 
   }
 
@@ -74,7 +74,7 @@ object util {
     def growthSpurts: Int
 
     def problemGrower = {
-      def growthSpurtsStream(spurts: Int, size: Int): Stream[List[P]] = {
+      def growthSpurtsStream(spurts: Int, size: Int): Stream[Vector[P]] = {
         if (spurts < 0) Stream.Empty
         else
           sample(size) #:: growthSpurtsStream(spurts - 1, size * 2)
@@ -91,4 +91,8 @@ object util {
       }
     }
   }
+
+  def randomList(span: Int)(size: Int) = for {
+    xs <- Gen.listOfN(size, Gen.choose(-span, span))
+  } yield xs.to[Vector]
 }

@@ -1,4 +1,4 @@
-package ideas4adoption
+package ideas4adoption.sum
 
 import ideas4adoption.recursion.serious._
 

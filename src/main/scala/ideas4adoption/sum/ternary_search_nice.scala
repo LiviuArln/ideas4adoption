@@ -1,4 +1,4 @@
-package ideas4adoption
+package ideas4adoption.sum
 
 object ternary_search_nice extends App {
   class TSN(s: List[Int]) {
