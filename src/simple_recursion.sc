@@ -42,6 +42,5 @@ object simple_recursion {
   }
 
  
-                                                  //> res2: Int = 3
 
 }
