@@ -2,8 +2,6 @@ package ideas4adoption
 
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
-import org.scalacheck.Gen
-import ideas4adoption.util._
 import ideas4adoption.sort.QuickSortOnDemand
 
 object QuickSortTest extends Properties("QuickSort") {

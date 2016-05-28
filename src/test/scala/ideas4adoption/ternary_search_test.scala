@@ -3,10 +3,6 @@ package ideas4adoption
 import org.scalacheck.Properties
 import org.scalacheck.Prop._
 import org.scalacheck.Gen
-import org.scalacheck.Arbitrary
-import org.scalacheck.Test.Parameters
-import org.scalacheck.Test.Parameters.Default
-import org.scalacheck.Test
 import ideas4adoption.sum.ternary_search._
 import ideas4adoption.sum.ternary_search_nice._
 import ideas4adoption.sum.Nary_search.NS
