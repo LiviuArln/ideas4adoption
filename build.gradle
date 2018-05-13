@@ -3,6 +3,7 @@ plugins {
 	id("scala")
 	id("eclipse")
 	id("idea")
+	id("application")
 	id "me.champeau.gradle.jmh" version "0.3.1"
 }
 
@@ -15,4 +16,6 @@ dependencies {
     compile 'org.scalacheck:scalacheck_2.11:1.13.0'
     compile 'org.spire-math:spire_2.11:0.11.0'
 }
+
+mainClassName = "grapht.TestWhatever"
 

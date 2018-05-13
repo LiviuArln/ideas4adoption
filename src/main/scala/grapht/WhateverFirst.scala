@@ -2,7 +2,6 @@ package grapht
 
 import org.scalacheck._
 import Gen._
-import breeze.linalg.DenseVector
 
 object WhaterverFirst {
     type Graph = Set[(Int,Int)]
@@ -20,7 +19,7 @@ object WhaterverFirst {
 
 
     
-    abstract class Traverser(g:Graph) {
+    trait Traverser {
         def push(n:Int)
 
         def next:Int
@@ -32,6 +31,8 @@ object WhaterverFirst {
         def preCollect(n:Int):Unit
 
         def postCollect(n:Int):Unit
+
+        def g:Graph
 
         val adiacencies = g.groupBy(_._1).map { case (origin, links) => 
                 origin -> links.map(_._2)
@@ -48,6 +49,10 @@ object WhaterverFirst {
             }
             processEnd
         } 
+    }
+
+    class GraphT(gt:Graph) {
+        val g = gt
     }
 
     
@@ -148,29 +153,12 @@ object WhaterverFirst {
 
     trait CoreFirst extends CoreOrderContainer {
         def coreFirst = true
-        def stackLike = true
+        def stackLike = false
     }
 
     trait PeriferyFirst extends CoreOrderContainer {
         def coreFirst = false
         def stackLike = true
-    }
-
-    def test = {
-        val n = 100
-        val maxE = n * (n-1)
-        val g = graphGen(Math.sqrt(maxE).toInt*10,n).sample.get.toSet  
-
-        //println(g)
-        //(new Traverser(g) with BreadthFirstContainer with PrintNodeProcessor).traverse(0)
-        //println("-----------")
-        //(new Traverser(g) with DepthFirstContainer with PrintNodeProcessor).traverse(0)
-        //println("-----------")
-        (new Traverser(g) with CoreFirst with CoreInternalsProcessor).traverse(0)
-        println("-----------")
-        (new Traverser(g) with PeriferyFirst with CoreInternalsProcessor).traverse(0)
-
-        //(new Traverser(g) with BreadthFirstContainer with LayerHighlighProcessor).traverse(0)
     }
 
     trait LayerHighlighProcessor {
@@ -207,14 +195,116 @@ object WhaterverFirst {
         def preCollect(n:Int) = {}
 
         def postCollect(n:Int) = {
-            if(!priotizedNodes.isEmpty) println(priotizedNodes.head._3 +"\t: "+priotizedNodes.head._1)
+            if(!priotizedNodes.isEmpty) {
+                val nextProcessing = priotizedNodes.head
+                println(nextProcessing._3 +"\t: "+nextProcessing._1)
+                if(nextProcessing._1 > max._2) {
+                    max = (nextProcessing._3, nextProcessing._1)
+                }
+            }
         }
 
         def processEnd = {
             println("--end--")
         }
+
+        var max = (0,0);
     }
 
 
     
+}
+
+
+
+import Math._
+import scala.collection.mutable.Map
+
+object F {
+    val start = (0,1)
+
+    type Graph = Set[(Int,Int)]
+
+    def size(g:Graph) = g.map(n => max(n._1,n._2)).fold(0)(max) + 1
+
+    def fuse(peak: (Int,Int), graph:Graph) = {
+        val nextValue = size(graph)
+        val (firstNewPeak, firstPivot) = pivot(peak, graph, nextValue)
+        val (secondNewPeak, secondPivot) = pivot(peak.swap, graph, nextValue * 2 - 1)
+        (firstNewPeak, secondNewPeak) -> (firstPivot ++ secondPivot)
+    }
+
+    def pivot(axis:(Int, Int) , graph:Graph, nextValue: Int):(Int, Graph) = {
+        val (center, base) = axis
+        val translate = new Translator(center, nextValue)
+        
+        val newGraph = graph.map { case (x:Int,y:Int) => 
+           translate(x) -> translate(y)
+        }
+
+        val newBase = translate(base)
+
+        newBase -> (graph ++ newGraph + (base -> newBase))
+    }
+
+    class Translator(center:Int, start:Int) {
+        var next = start
+        val translations = Map(center -> center)
+
+        def apply(i:Int) = translations.getOrElseUpdate(i, withAdvance)
+
+        def withAdvance = {
+            next += 1
+            next - 1
+        }
+    }
+
+    def go(steps: Int) = {
+        var i = steps;
+        var p = (start, Set(start))
+        while(i > 0) {
+            p = fuse(p._1, p._2)
+            println("peaks: " + p._1)
+            println("graph: " + p._2)
+            println("nodes: " + size(p._2))
+            println("edges: " + p._2.size)
+            println
+            
+            i = i - 1
+        }
+        println("end... ")
+        p._2
+    }
+
+     
+    
+}
+    
+
+object TestWhatever extends App {
+    import WhaterverFirst._
+    
+    def bidirectional(g:Graph):Graph = g ++ g.map{_.swap} 
+
+    def complement(g:Graph):Graph = {
+        val order = F.size(g) - 1
+        val complete = for {
+            origin <- 0 to order
+            destination <- 0 to order
+            if(origin != destination)
+        } yield (origin, destination)
+        complete.toSet -- g
+    } 
+     
+
+    //val n = 100
+    //val maxE = n * n / 10
+    //val g = graphGen(Math.sqrt(maxE).toInt*10,n).sample.get.toSet  
+
+    val g = complement(bidirectional(F.go(4)))
+
+    val tg = new GraphT(g) with Traverser with CoreFirst with CoreInternalsProcessor
+    tg.traverse(0)
+    (new GraphT(g) with Traverser with CoreFirst with CoreInternalsProcessor).traverse(tg.max._1)
+    println(tg.max)
 }
