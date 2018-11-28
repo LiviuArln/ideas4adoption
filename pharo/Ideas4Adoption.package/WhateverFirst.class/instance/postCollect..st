@@ -1,0 +1,2 @@
+running
+postCollect: aNode

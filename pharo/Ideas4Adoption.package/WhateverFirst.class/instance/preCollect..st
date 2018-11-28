@@ -1,0 +1,2 @@
+running
+preCollect: aNode
