@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "TestCase",
+	"category" : "Exercism-TwoFer",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"twoFer"
+	],
+	"name" : "TwoFerTest",
+	"type" : "normal"
+}

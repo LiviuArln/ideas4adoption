@@ -1,0 +1,1 @@
+To start your Exercism journey, right click on the Exercism package and select 'Exercism | Fetch  Exercise', and then type: hello-world

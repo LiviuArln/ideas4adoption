@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "TestCase",
+	"category" : "Exercism-ReverseString",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"stringReverser"
+	],
+	"name" : "ReverseStringTest",
+	"type" : "normal"
+}
