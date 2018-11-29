@@ -1,3 +1,4 @@
 running
 next
 	
+	self subclassResponsibility

@@ -1,3 +1,4 @@
 running
 isEmpty
+	self subclassResponsibility 
 	
