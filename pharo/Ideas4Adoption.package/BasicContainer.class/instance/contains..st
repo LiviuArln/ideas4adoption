@@ -1,3 +1,3 @@
-running
-postCollect: aNode
+removing
+contains: aNode
 	self subclassResponsibility

@@ -1,3 +1,3 @@
-running
-preCollect: aNode
+removing
+remove
 	self subclassResponsibility

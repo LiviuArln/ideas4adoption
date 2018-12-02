@@ -1,14 +1,13 @@
 {
 	"commentStamp" : "",
-	"super" : "Object",
+	"super" : "WhateverFirst",
 	"category" : "Ideas4Adoption",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],
 	"instvars" : [
-		"adiacencies",
-		"collectHook"
+		"visited"
 	],
-	"name" : "WhateverFirst",
+	"name" : "BasicContainer",
 	"type" : "normal"
 }

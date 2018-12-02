@@ -1,0 +1,3 @@
+removing
+remove
+	nodesToVisit pop
